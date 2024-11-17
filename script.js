@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const arrow = ourTeamToggle?.querySelector('.arrow');
 
     if (ourTeamToggle && ourTeamMenu) {
-        // Desktop: Show/hide dropdown on hover
         const showDropdown = () => {
             ourTeamMenu.classList.add('active');
             arrow?.classList.add('active');
@@ -48,6 +47,8 @@ document.addEventListener('DOMContentLoaded', function () {
             ourTeamMenu.classList.remove('active');
             arrow?.classList.remove('active');
         };
+
+        // Desktop: Show/hide dropdown on hover
         ['mouseover', 'focus'].forEach(eventType => ourTeamToggle.addEventListener(eventType, showDropdown));
         ['mouseout', 'blur'].forEach(eventType => ourTeamToggle.addEventListener(eventType, hideDropdown));
 
@@ -103,4 +104,36 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // Disable dropdown functionality in mobile view and make links straightforward
+    const checkMobileView = () => {
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                dropdown.classList.remove('active'); // Close dropdowns on mobile
+            });
+            document.querySelectorAll('.dropdown-toggle').forEach(toggleButton => {
+                toggleButton.removeEventListener('click', toggleDropdownHandler);
+                toggleButton.href = '#'; // Make sure it acts like a regular link
+            });
+        }
+    };
+
+    const toggleDropdownHandler = e => {
+        e.preventDefault();
+        const dropdownMenu = e.target.nextElementSibling;
+
+        // Close other open dropdowns before toggling current
+        document.querySelectorAll('.dropdown-content.active').forEach(menu => {
+            if (menu !== dropdownMenu) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Toggle the current dropdown
+        dropdownMenu?.classList.toggle('active');
+    };
+
+    // Ensure proper behavior on window resize
+    window.addEventListener('resize', checkMobileView);
+    checkMobileView(); // Initial check
 });
