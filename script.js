@@ -54,6 +54,15 @@ document.addEventListener('DOMContentLoaded', function () {
         // Mobile: Toggle dropdown on click
         ourTeamToggle.addEventListener('click', e => {
             e.preventDefault();
+
+            // Close all other dropdowns before toggling current
+            document.querySelectorAll('.dropdown-content.active').forEach(menu => {
+                if (menu !== ourTeamMenu) {
+                    menu.classList.remove('active');
+                }
+            });
+
+            // Toggle current dropdown
             ourTeamMenu.classList.toggle('active');
             arrow?.classList.toggle('active');
         });
