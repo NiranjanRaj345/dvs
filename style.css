@@ -1,0 +1,419 @@
+/* General Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Body and General Font Settings */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    line-height: 1.6; /* Enhance text readability */
+    scroll-behavior: smooth; /* Enable smooth scrolling for better usability */
+}
+
+/* Top Navigation Bar with Logo */
+.top-nav {
+    background-color: rgba(0, 0, 0, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    left: 0;
+    padding: 15px 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: background-color 0.3s ease-in-out; /* Smooth background color change */
+}
+
+.top-nav.scrolled {
+    background-color: rgba(0, 0, 0, 0.8); /* Slightly transparent on scroll */
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* College Logo Styling */
+.logo {
+    height: auto;
+    width: 110px;
+    margin-right: 20px;
+    margin-left: 20px;
+    transition: transform 0.3s ease-in-out; /* Add scaling effect on hover */
+}
+
+.logo:hover {
+    transform: scale(1.1);
+}
+
+/* Text on Header */
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-text {
+    color: white; /* Set the text color */
+    font-size: 0.8em; /* Adjust font size as needed */
+    margin-left: 8px; /* Add spacing between logo and text */
+    font-weight: 400; /* Optional: Make it bold */
+}
+
+/* Navigation Links */
+.top-nav nav ul {
+    display: flex;
+    gap: 20px;
+    list-style-type: none;
+}
+
+.top-nav nav ul li a {
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease; /* Added text-shadow effect */
+}
+
+.top-nav nav ul li a:hover {
+    color: #ff9900;
+    text-shadow: 0px 0px 5px rgba(255, 153, 0, 0.75);
+}
+
+/* Dropdown Menu */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none; /* Initially hide the dropdown content */
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.9); /* Background color for dropdown */
+    min-width: 120px; /* Minimum width of dropdown */
+    top: 175%; /* Positioned below the header with a transparent gap */
+    left: 10%;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); /* Shadow for dropdown */
+    padding: 12px 16px; /* Padding for dropdown items */
+    list-style: none;
+    border-radius: 8px;
+    z-index: 100; /* Ensure it appears above other content */
+}
+
+/* Dropdown Hover or Active State */
+.dropdown:hover .dropdown-content,
+.dropdown-content.active{
+    display: block; /* Show the dropdown content on hover */
+}
+
+/* Transparent clickable buffer zone (to include the gap) */
+.dropdown:hover .dropdown-content::before {
+    content: "";
+    position: absolute;
+    top: -20px; /* Cover the transparent gap */
+    left: 0;
+    bottom: -10px;
+    height: 200%; /* Match the transparent gap size */
+    width: 100%;
+    z-index: -1; /* Ensure it doesn't block clicks */
+}
+
+.arrow {
+    display: inline-block;
+    margin-left: 1px;
+    margin-bottom: 1.5px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid white;
+    transition: transform 0.3s ease;
+}
+
+/* Rotate arrow when active */
+.arrow.active {
+    transform: rotate(180deg);
+}
+
+/* Dropdown Content List Items */
+.dropdown-content li {
+    padding: 10px 15px; /* Padding for each dropdown item */
+}
+
+.dropdown-content li a {
+    color: white; /* Ensure dropdown links are consistent with overall theme */
+    text-decoration: none; /* Remove underline */
+    font-size: 1em; /* Font size */
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.dropdown-content li a:hover {
+    color: #ff9900; /* Change color on hover */
+}
+
+/* Adjustments for Mobile View */
+@media (max-width: 768px) {
+    /* Style for the hamburger menu */
+    .hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        z-index: 1001; /* Ensure it's above other elements */
+    }
+
+    .hamburger span {
+        width: 100%;
+        height: 3px;
+        background-color: #fff;
+        border-radius: 5px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Animation class for hamburger when active */
+    .hamburger.is-active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.is-active span:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.is-active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Default navigation menu hidden for mobile */
+    /* Mobile dropdown adjustments */
+    #nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.9);
+        width: 200px;
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 1000;
+    }
+
+    /* Show navigation when active */
+    #nav-menu.active {
+        display: block;
+    }
+
+    #nav-menu ul {
+        flex-direction: column;
+        padding: 10px 0;
+    }
+
+    #nav-menu ul li {
+        position: relative; /* Needed for dropdown positioning */
+        margin: 10px 0;
+    }
+
+    #nav-menu ul li a {
+        color: white;
+        font-size: 1.2em;
+        text-decoration: none;
+    }
+
+    /* Mobile dropdown inside hamburger menu */
+    #nav-menu .dropdown-content {
+        position: relative;
+        top: 0; /* Aligns properly inside mobile view */
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+    /* Adjustments for Mobile View */
+    /* General Mobile Dropdown Styling */
+    .dropdown-content {
+        position: static; /* Make the dropdown content flow in the document */
+        display: none; /* Initially hide the dropdown */
+        background-color: rgba(0, 0, 0, 0.9); /* Maintain theme consistency */
+        border-radius: 5px; /* Consistent styling */
+        padding: 10px;
+        width: 100%; /* Full width for better appearance */
+        margin-top: 10px; /* Add space between toggle and content */
+    }
+
+    /* Display dropdown content when active */
+    .dropdown-content.active {
+        display: block; /* Show the dropdown */
+    }
+
+    /* Dropdown items styling for mobile */
+    .dropdown-content li {
+        padding: 10px 0; /* Add padding for touch-friendly design */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Add subtle separators */
+    }
+
+    .dropdown-content li:last-child {
+        border-bottom: none; /* Remove border for the last item */
+    }
+
+    .dropdown-content li a {
+        color: white; /* Maintain theme consistency */
+        font-size: 1em; /* Adjust for readability on smaller screens */
+        text-decoration: none; /* No underline */
+        transition: color 0.3s ease; /* Smooth hover effect */
+    }
+
+    .dropdown-content li a:hover {
+        color: #ff9900; /* Highlight on hover */
+    }
+
+    /* Sync dropdown toggle button with mobile view */
+    .dropdown-toggle {
+        display: block; /* Ensure visibility in mobile view */
+        width: 100%; /* Full width for easy interaction */
+        padding: 10px; /* Add padding for better touch response */
+        text-align: left; /* Align text to the left for consistency */
+        color: white; /* Maintain theme consistency */
+        background-color: transparent; /* No background for a clean look */
+        border: none; /* Remove border */
+        font-size: 1.2em; /* Slightly larger font size */
+    }
+
+    /* Dropdown arrow adjustments for mobile */
+    .arrow {
+        float: right; /* Align the arrow to the right */
+        transition: transform 0.3s ease; /* Smooth rotation */
+    }
+
+    .arrow.active {
+        transform: rotate(180deg); /* Rotate arrow when active */
+    }
+
+    /* Push other content down when dropdown opens */
+    #nav-menu .dropdown-content.active {
+        margin-bottom: 15px; /* Add space below open dropdown */
+    }
+
+
+}
+
+/* Hero Section Styling */
+.hero-section {
+    align-items: center;
+    background-image: url('../images/Appearance.jpg');
+    background-position: center;
+    background-size: cover;
+    color: white;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out; /* Subtle change effect */
+}
+
+.hero-section::before {
+    background-color: rgba(0, 0, 0, 0.5);
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-content h1 {
+    font-size: 3em;
+    margin-bottom: 0.5em;
+}
+
+.hero-content p {
+    font-size: 1.2em;
+    margin-bottom: 1em;
+}
+
+.hero-button {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+    display: inline-block;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.hero-button:hover {
+    background-color: white;
+    color: #000;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #111;
+    color: #f1f1f1;
+    font-size: 0.9em;
+    padding: 40px 20px;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.footer-info,
+.footer-links,
+.footer-social {
+    flex: 1;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.footer-info h3 {
+    color: #ff9900;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+}
+
+.footer-info p {
+    line-height: 1.6;
+}
+
+.footer-links ul,
+.footer-social ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-links ul li,
+.footer-social ul li {
+    margin: 5px 0;
+}
+
+.footer-links ul li a,
+.footer-social ul li a {
+    color: #f1f1f1;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links ul li a:hover,
+.footer-social ul li a:hover {
+    color: #ff9900;
+}
+
+.footer-bottom {
+    border-top: 1px solid #333;
+    color: #ccc;
+    font-size: 0.8em;
+    padding-top: 20px;
+    text-align: center;
+}
