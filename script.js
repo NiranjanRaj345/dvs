@@ -39,16 +39,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const arrow = ourTeamToggle?.querySelector('.arrow');
 
     if (ourTeamToggle && ourTeamMenu) {
-        const showDropdown = () => {
+        const expandPanel = () => {
+            // Expand the whole panel
+            ourTeamMenu.style.maxHeight = `${ourTeamMenu.scrollHeight}px`;
             ourTeamMenu.classList.add('active');
             arrow?.classList.add('active');
         };
-        const hideDropdown = () => {
+
+        const collapsePanel = () => {
+            // Collapse the whole panel
+            ourTeamMenu.style.maxHeight = null;
             ourTeamMenu.classList.remove('active');
             arrow?.classList.remove('active');
         };
 
         // Desktop: Show/hide dropdown on hover
+        const showDropdown = () => expandPanel();
+        const hideDropdown = () => collapsePanel();
+
         ['mouseover', 'focus'].forEach(eventType => ourTeamToggle.addEventListener(eventType, showDropdown));
         ['mouseout', 'blur'].forEach(eventType => ourTeamToggle.addEventListener(eventType, hideDropdown));
 
@@ -56,22 +64,24 @@ document.addEventListener('DOMContentLoaded', function () {
         ourTeamToggle.addEventListener('click', e => {
             e.preventDefault();
 
-            // Close all other dropdowns before toggling current
-            document.querySelectorAll('.dropdown-content.active').forEach(menu => {
-                if (menu !== ourTeamMenu) {
+            const isActive = ourTeamMenu.classList.contains('active');
+            if (isActive) {
+                collapsePanel();
+            } else {
+                // Close all other dropdowns before expanding this one
+                document.querySelectorAll('.dropdown-content.active').forEach(menu => {
+                    menu.style.maxHeight = null;
                     menu.classList.remove('active');
-                }
-            });
+                });
 
-            // Toggle current dropdown
-            ourTeamMenu.classList.toggle('active');
-            arrow?.classList.toggle('active');
+                expandPanel();
+            }
         });
 
         // Close "Our Team" dropdown if clicking outside
         document.addEventListener('click', e => {
             if (!ourTeamToggle.contains(e.target) && !ourTeamMenu.contains(e.target)) {
-                hideDropdown();
+                collapsePanel();
             }
         });
     } else {
@@ -80,19 +90,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // General dropdown functionality for other dropdowns
     document.querySelectorAll('.dropdown-toggle').forEach(toggleButton => {
+        const dropdownMenu = toggleButton.nextElementSibling;
+
         toggleButton.addEventListener('click', e => {
             e.preventDefault();
-            const dropdownMenu = toggleButton.nextElementSibling;
 
-            // Close other open dropdowns before toggling current
-            document.querySelectorAll('.dropdown-content.active').forEach(menu => {
-                if (menu !== dropdownMenu) {
+            const isActive = dropdownMenu.classList.contains('active');
+            if (isActive) {
+                dropdownMenu.style.maxHeight = null;
+                dropdownMenu.classList.remove('active');
+            } else {
+                // Close other open dropdowns
+                document.querySelectorAll('.dropdown-content.active').forEach(menu => {
+                    menu.style.maxHeight = null;
                     menu.classList.remove('active');
-                }
-            });
+                });
 
-            // Toggle the current dropdown
-            dropdownMenu?.classList.toggle('active');
+                dropdownMenu.style.maxHeight = `${dropdownMenu.scrollHeight}px`;
+                dropdownMenu.classList.add('active');
+            }
         });
     });
 
@@ -100,40 +116,47 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('click', e => {
         document.querySelectorAll('.dropdown-content.active').forEach(menu => {
             if (!menu.parentElement.contains(e.target)) {
+                menu.style.maxHeight = null;
                 menu.classList.remove('active');
             }
         });
     });
+});
 
-    // Disable dropdown functionality in mobile view and make links straightforward
-    const checkMobileView = () => {
-        if (window.innerWidth <= 768) {
-            document.querySelectorAll('.dropdown-content').forEach(dropdown => {
-                dropdown.classList.remove('active'); // Close dropdowns on mobile
-            });
-            document.querySelectorAll('.dropdown-toggle').forEach(toggleButton => {
-                toggleButton.removeEventListener('click', toggleDropdownHandler);
-                toggleButton.href = '#'; // Make sure it acts like a regular link
-            });
-        }
-    };
 
-    const toggleDropdownHandler = e => {
-        e.preventDefault();
-        const dropdownMenu = e.target.nextElementSibling;
+// Mobile dropdown functionality
+document.addEventListener('DOMContentLoaded', function () {
+    const navMenu = document.getElementById('nav-menu');
 
-        // Close other open dropdowns before toggling current
-        document.querySelectorAll('.dropdown-content.active').forEach(menu => {
-            if (menu !== dropdownMenu) {
-                menu.classList.remove('active');
+    // Toggle dropdowns on mobile
+    document.querySelectorAll('#nav-menu .dropdown-toggle').forEach(toggleButton => {
+        const dropdownMenu = toggleButton.nextElementSibling;
+        const arrow = toggleButton.querySelector('.arrow');
+
+        toggleButton.addEventListener('click', e => {
+            e.preventDefault();
+
+            const isActive = dropdownMenu.classList.contains('active');
+            if (isActive) {
+                // Collapse the dropdown
+                dropdownMenu.style.maxHeight = null;
+                dropdownMenu.classList.remove('active');
+                arrow?.classList.remove('active');
+            } else {
+                // Close other open dropdowns
+                navMenu.querySelectorAll('.dropdown-content.active').forEach(menu => {
+                    menu.style.maxHeight = null;
+                    menu.classList.remove('active');
+                    menu.previousElementSibling.querySelector('.arrow')?.classList.remove('active');
+                });
+
+                // Expand the clicked dropdown
+                dropdownMenu.style.maxHeight = `${dropdownMenu.scrollHeight}px`;
+                dropdownMenu.classList.add('active');
+                arrow?.classList.add('active');
             }
         });
-
-        // Toggle the current dropdown
-        dropdownMenu?.classList.toggle('active');
-    };
-
-    // Ensure proper behavior on window resize
-    window.addEventListener('resize', checkMobileView);
-    checkMobileView(); // Initial check
+    });
 });
+
+
