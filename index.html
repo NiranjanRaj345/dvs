@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Department of Mathematics for Excellence - Empowering Knowledge and Innovation">
     <meta name="keywords" content="Department, Education, Innovation, Mathematics for Excellence">
-    <meta name="author" content="[Your Name]">
+    <meta name="author" content="Mathematics Department">
     <meta property="og:title" content="Department of Mathematics for Excellence">
     <meta property="og:description" content="Empowering Knowledge and Innovation in Mathematics.">
     <meta property="og:image" content="../images/social-share.png">
@@ -17,10 +17,11 @@
 </head>
 <body>
     <!-- Skip to Content Link for Accessibility -->
-    <a href="#home" class="skip-to-content">Skip to Content</a>
+    <!-- <a href="#home" class="skip-to-content">Skip to Content</a> -->
 
     <!-- Header with Logo and Navigation Menu -->
-    <header class="top-nav">
+    <a href="#home" class="skip-to-content">Skip to Content</a>
+<header class="top-nav">
         <div class="nav-container">
             <!-- College Logo and Text on left-->
             <div class="logo-container">
@@ -35,7 +36,8 @@
             </div>
 
             <!-- Navigation Menu -->
-            <nav id="nav-menu">
+            <nav id="nav-menu",role="navigation">
+                
                 <ul>
                     <li><a href="#home">Home</a></li>
                     <li><a href="#about">About</a></li>
@@ -53,13 +55,14 @@
             </nav>
         </div>
     </header>
+    
 
     <!-- Main Content -->
     <main>
         <!-- Hero Section -->
-        <section id="home" class="hero-section">
+        <section id="home" class="hero-section" aria-labelledby="hero-title">
             <div class="hero-content">
-                <h1>Department of Mathematics for Excellence</h1>
+                <h1 id="hero-title">Department of Mathematics for Excellence</h1>
                 <p>Empowering Knowledge and Innovation</p>
                 <a href="#about" class="hero-button">Explore Our Department</a>
             </div>
@@ -124,13 +127,13 @@
             <div class="footer-social">
                 <h4>Follow Us</h4>
                 <ul>
-                    <li><a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                    <li><a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook">
                         <img src="../images/facebook-icon.png" alt="Facebook" loading="lazy">
                     </a></li>
-                    <li><a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                    <li><a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Twitter">
                         <img src="../images/twitter-icon.png" alt="Twitter" loading="lazy">
                     </a></li>
-                    <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                    <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram">
                         <img src="../images/instagram-icon.png" alt="Instagram" loading="lazy">
                     </a></li>
                 </ul>
