@@ -5,40 +5,17 @@
     padding: 0;
 }
 
-/* Root Variables for Theme Consistency */
-:root {
-    --primary-color: #ff9900;
-    --text-color: #f1f1f1;
-    --bg-color: #000;
-    --sticky-opacity: 0.8;
-    --link-hover-color: #ff9900;
-}
-
 /* Body and General Font Settings */
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Arial, Helvetica,sans-serif;
     margin: 0;
-    line-height: 1.6;
-    color: var(--text-color);
-    background-color: var(--bg-color);
-    scroll-behavior: smooth;
+    line-height: 1.6; /* Enhance text readability */
+    scroll-behavior: smooth; /* Enable smooth scrolling for better usability */
 }
 
-/* Scroll Progress Bar */
-#progress-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 4px;
-    background-color: var(--primary-color);
-    width: 0;
-    z-index: 1000;
-    transition: width 0.2s ease-in-out;
-}
-
-/* Top Navigation Bar with Sticky Behavior */
+/* Top Navigation Bar with Logo */
 .top-nav {
-    background-color: var(--bg-color);
+    background-color: rgba(0, 0, 0, 1);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     left: 0;
     padding: 15px 20px;
@@ -46,11 +23,11 @@ body {
     top: 0;
     width: 100%;
     z-index: 1000;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out; /* Smooth background color change */
 }
 
-.top-nav.sticky {
-    background-color: rgba(0, 0, 0, var(--sticky-opacity));
+.top-nav.scrolled {
+    background-color: rgba(0, 0, 0, 0.8); /* Slightly transparent on scroll */
 }
 
 .nav-container {
@@ -60,17 +37,30 @@ body {
     width: 100%;
 }
 
-/* Logo Styling */
+/* College Logo Styling */
 .logo {
     height: auto;
     width: 110px;
     margin-right: 20px;
     margin-left: 20px;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out; /* Add scaling effect on hover */
 }
 
 .logo:hover {
     transform: scale(1.1);
+}
+
+/* Text on Header */
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-text {
+    color: white; /* Set the text color */
+    font-size: 0.8em; /* Adjust font size as needed */
+    margin-left: 8px; /* Add spacing between logo and text */
+    font-weight: 400; /* Optional: Make it bold */
 }
 
 /* Navigation Links */
@@ -81,16 +71,16 @@ body {
 }
 
 .top-nav nav ul li a {
-    color: var(--text-color);
+    color: white;
     font-size: 1em;
     font-weight: bold;
     text-decoration: none;
-    padding: 10px 15px;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+    padding: 10px 15px; /* Larger touch area */
+    transition: color 0.3s ease, text-shadow 0.3s ease; /* Added text-shadow effect */
 }
 
 .top-nav nav ul li a:hover {
-    color: var(--link-hover-color);
+    color: #ff9900;
     text-shadow: 0px 0px 5px rgba(255, 153, 0, 0.75);
 }
 
@@ -99,69 +89,70 @@ body {
     position: relative;
 }
 
-.dropdown-toggle {
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-}
-
 .dropdown-content {
+    display: none; /* Initially hide the dropdown content */
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.9);
-    border-radius: 5px;
-    top: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Background color for dropdown */
+    min-width: 120px; /* Minimum width of dropdown */
+    top: 175%; /* Positioned below the header with a transparent gap */
+    left: 20%;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); /* Shadow for dropdown */
+    padding: 12px 16px; /* Padding for dropdown items */
+    list-style: none;
+    border-radius: 8px;
+    z-index: 100; /* Ensure it appears above other content */
+    transition: max-height 0.3s ease-in-out; /* Add transition */
+}
+
+/* Dropdown Hover or Active State */
+.dropdown:hover .dropdown-content,
+.dropdown-content.active{
+    display: block; /* Show the dropdown content on hover */
+}
+
+/* Transparent clickable buffer zone (to include the gap) */
+.dropdown:hover .dropdown-content::before {
+    content: "";
+    position: absolute;
+    top: -20px; /* Cover the transparent gap */
     left: 0;
-    overflow: hidden;
-    opacity: 0;
-    max-height: 0;
-    visibility: hidden;
-    padding: 0;
-    z-index: 1000;
-    transition: all 0.3s ease-in-out;
+    bottom: -10px;
+    height: 200%; /* Match the transparent gap size */
+    width: 100%;
+    z-index: -1; /* Ensure it doesn't block clicks */
 }
 
-/* Active Dropdown State */
-.dropdown-content.active {
-    opacity: 1;
-    max-height: 300px; /* Adjust height based on content */
-    visibility: visible;
-    pointer-events: auto;
-}
-
-/* Dropdown Content List Items */
-.dropdown-content li {
-    padding: 10px 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.dropdown-content li:last-child {
-    border-bottom: none;
-}
-
-.dropdown-content li a {
-    color: var(--text-color);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.dropdown-content li a:hover {
-    color: var(--link-hover-color);
-}
-
-/* Dropdown Arrow Styling */
 .arrow {
     display: inline-block;
-    margin-left: 5px;
+    margin-left: 1px;
+    margin-bottom: 1.5px;
     width: 0;
     height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid var(--text-color);
+    border-top: 5px solid white;
     transition: transform 0.3s ease;
 }
 
+/* Rotate arrow when active */
 .arrow.active {
     transform: rotate(180deg);
+}
+
+/* Dropdown Content List Items */
+.dropdown-content li {
+    padding: 10px 15px; /* Padding for each dropdown item */
+}
+
+.dropdown-content li a {
+    color: white; /* Ensure dropdown links are consistent with overall theme */
+    text-decoration: none; /* Remove underline */
+    font-size: 1em; /* Font size */
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.dropdown-content li a:hover {
+    color: #ff9900; /* Change color on hover */
 }
 
 /* Hero Section Styling */
@@ -177,11 +168,12 @@ body {
     justify-content: center;
     position: relative;
     text-align: center;
+    transition: background-color 0.3s ease-in-out; /* Subtle change effect */
 }
 
 .hero-section::before {
     background-color: rgba(0, 0, 0, 0.5);
-    content: '';
+    content: "";
     height: 100%;
     left: 0;
     position: absolute;
@@ -210,21 +202,21 @@ body {
     color: white;
     display: inline-block;
     font-weight: bold;
-    padding: 15px 25px;
-    border-radius: 5px;
+    padding: 15px 25px; /* Increase padding for better touch area */
+    border-radius: 5px; /* Add slight rounding */
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .hero-button:hover {
     background-color: white;
-    color: var(--bg-color);
+    color: #000;
 }
 
 /* Footer Styles */
 .footer {
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    background-color: #111;
+    color: #f1f1f1;
     font-size: 0.9em;
     padding: 40px 20px;
 }
@@ -246,7 +238,7 @@ body {
 }
 
 .footer-info h3 {
-    color: var(--primary-color);
+    color: #ff9900;
     font-size: 1.3em;
     margin-bottom: 10px;
 }
@@ -268,14 +260,14 @@ body {
 
 .footer-links ul li a,
 .footer-social ul li a {
-    color: var(--text-color);
+    color: #f1f1f1;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .footer-links ul li a:hover,
 .footer-social ul li a:hover {
-    color: var(--link-hover-color);
+    color: #ff9900;
 }
 
 .footer-bottom {
@@ -286,13 +278,28 @@ body {
     text-align: center;
 }
 
-/* Mobile Styles */
+#progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background-color: #ff9900;
+    width: 0;
+    z-index: 1000;
+}
+
+
+
+
+/* Adjustments for Mobile View */
 @media (max-width: 768px) {
+    /* Style for the hamburger menu */
+    /* Hamburger Icon */
     .hamburger {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        width: 35px;
+        width: 35px; /* Larger size for better visibility */
         height: 35px;
         cursor: pointer;
         z-index: 1001;
@@ -300,12 +307,13 @@ body {
 
     .hamburger span {
         width: 100%;
-        height: 4px;
+        height: 4px; /* Thicker lines for better visibility */
         background-color: #fff;
         border-radius: 2px;
         transition: all 0.3s ease-in-out;
     }
 
+    /* Animation class for hamburger when active */
     .hamburger.is-active span:nth-child(1) {
         transform: rotate(45deg) translate(5px, 5px);
     }
@@ -316,18 +324,23 @@ body {
         transform: rotate(-45deg) translate(5px, -5px);
     }
 
+    /* Default navigation menu hidden for mobile */
+    /* Full-Screen Menu */
     #nav-menu {
         display: none;
         position: absolute;
         top: 110%;
-        right: 5%;
+        right: 0.8%;
         background-color: rgba(0, 0, 0, 0.9);
-        width: 200px;
+        width: 200px; /* Slightly wider for better alignment */
         padding: 10px;
         border-radius: 5px;
         z-index: 1000;
+        transition: max-height 0.3s ease-in-out;
+        overflow: hidden; /* Prevent content overflow */
     }
 
+    /* Show navigation when active */
     #nav-menu.active {
         display: block;
     }
@@ -337,33 +350,131 @@ body {
         padding: 0;
     }
 
+    #nav-menu ul li {
+        position: relative; /* Needed for dropdown positioning */
+        margin: 1px;
+        text-align: left; /* Align to the left for better readability */
+    }
+
+    #nav-menu ul li a {
+        color: white;
+        font-size: 1.2em; /* Slightly larger font size */
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    #nav-menu ul li a:hover {
+        color: #ff9900;
+    }
+
+    /* Mobile dropdown inside hamburger menu */
+    #nav-menu .dropdown-content {
+        position: static; /* Static for better alignment inside mobile menu */
+    display: none;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0; /* Space between items */
+    max-height: 80vh; /* Prevent overflow issues */
+    overflow-y: auto; /* Allow scrolling if content exceeds viewport */
+}
+
+    /* Display dropdown content when active */
+    #nav-menu .dropdown-content.active {
+        display:block;
+    }
+
     .dropdown-content {
-        margin: 10px 0;
-        padding: 10px 15px;
-        animation: fadeIn 0.3s ease-in-out;
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+    /* Dropdown items styling for mobile */
+    .dropdown-content li {
+        padding: 10px 15px; /* Add padding for touch-friendly design */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Add subtle separators */
+    }
+
+    .dropdown-content li:last-child {
+        border-bottom: none; /* Remove border for last item */
+    }
+    
+
+    .dropdown-content li a {
+        
+        font-size: 1em;
+        text-decoration: none;
+    }
+
+    .dropdown-content li a:hover {
+        color: #ff9900; /* Highlight on hover */
+    }
+
+    /* Sync dropdown toggle button with mobile view */
+   .dropdown-toggle {
+        width: 100%; /* Full width for consistency */
+        padding: 12px 15px; /* Adjusted padding */
+        color: white; /* Text color */
+        background-color: transparent; /* Clean look */
+        border: none; /* No border */
+        font-size: 1.2em; /* Larger size for readability */
+        text-align: left; /* Left align text */
+    }
+
+    /* Smooth Animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Dropdown arrow adjustments for mobile */
+    .arrow {
+        display: inline-block;
+    margin-left: 1px;
+    margin-bottom: 1.5px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid white;
+    transition: transform 0.3s ease;
+    }
+
+    .arrow.active {
+        transform: rotate(180deg); /* Rotate arrow when active */
+    }
+
+    /* Push other content down when dropdown opens */
+    #nav-menu .dropdown-content.active {
+        margin-bottom: 15px; /* Add space below open dropdown */
     }
 
     .hero-content h1 {
-        font-size: 2.2em;
+        font-size: 2.2em; /* Smaller font size for headings */
+        line-height: 1.2;
     }
 
     .hero-content p {
-        font-size: 1em;
+        font-size: 1em; /* Reduce paragraph text size */
+        margin-bottom: 15px;
     }
 
     .hero-button {
-        padding: 12px 24px;
+        padding: 12px 24px; /* Increase padding for touch-friendly design */
         font-size: 1em;
     }
-}
 
-/* Animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
+    .footer-social ul {
+        display: flex;
+        justify-content: center;
     }
-    to {
-        opacity:1;
-    }
+
+
 
 }
