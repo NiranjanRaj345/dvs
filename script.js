@@ -1,179 +1,130 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Sticky navigation bar effect with debounce
+    // Debounce Function for Improved Performance
+    const debounce = (func, delay) => {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => func(...args), delay);
+        };
+    };
+
+    // Throttle Function for Improved Performance
+    const throttle = (func, limit) => {
+        let lastFunc;
+        let lastRan;
+        return (...args) => {
+            const context = this;
+            if (!lastRan) {
+                func.apply(context, args);
+                lastRan = Date.now();
+            } else {
+                clearTimeout(lastFunc);
+                lastFunc = setTimeout(() => {
+                    if (Date.now() - lastRan >= limit) {
+                        func.apply(context, args);
+                        lastRan = Date.now();
+                    }
+                }, limit - (Date.now() - lastRan));
+            }
+        };
+    };
+
+    // Sticky Navigation Bar with Dynamic Opacity
     const navbar = document.querySelector('.top-nav');
-    let scrollTimeout;
+    const handleScroll = () => {
+        const scrollPosition = window.pageYOffset;
+        navbar.classList.toggle('sticky', scrollPosition > 0);
+        navbar.style.backgroundColor = `rgba(0, 0, 0, ${scrollPosition > 50 ? 0.8 : 1})`;
+    };
+    window.addEventListener('scroll', throttle(handleScroll, 100));
 
-    window.addEventListener('scroll', () => {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-            const scrollPosition = window.pageYOffset;
-
-            // Toggle sticky class and adjust background opacity
-            navbar.classList.toggle('sticky', scrollPosition > 0);
-            navbar.style.backgroundColor = `rgba(0, 0, 0, ${scrollPosition > 50 ? 0.8 : 1})`;
-        }, 100); // Debounce for better performance
-    });
-
-    // Smooth scroll for anchor links with fallback
+    // Smooth Scrolling for Anchor Links with Offset for Sticky Navbar
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', e => {
+        anchor.addEventListener('click', (e) => {
             e.preventDefault();
+            const offset = 70; // Adjust this value based on navbar height
             const targetElement = document.querySelector(anchor.getAttribute('href'));
             if (targetElement) {
-                targetElement.scrollIntoView
-                    ? targetElement.scrollIntoView({ behavior: 'smooth' })
-                    : window.scrollTo(0, targetElement.offsetTop);
+                const targetPosition = targetElement.offsetTop - offset;
+                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
             }
         });
     });
 
-    // Mobile hamburger menu toggle
+    // Hamburger Menu for Mobile
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('nav-menu');
 
     if (hamburger && navMenu) {
-        
-    hamburger.addEventListener('click', () => {
-        const expanded = hamburger.getAttribute('aria-expanded') === 'true' || false;
-        hamburger.setAttribute('aria-expanded', !expanded);
-    
-            navMenu.classList.toggle('active'); // Show/hide menu
-            hamburger.classList.toggle('is-active'); // Animate hamburger icon
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active'); // Show/hide the menu
+            hamburger.classList.toggle('is-active'); // Animate the hamburger icon
         });
 
-        // Close mobile menu when a link is clicked
-        navMenu.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            hamburger.classList.remove('is-active');
-        });
-    } else {
-        console.error('Hamburger menu or navigation menu not found in DOM.');
-    }
-
-    // Dropdown menu functionality for "Our Team"
-    const ourTeamToggle = document.getElementById('ourTeamToggle');
-    const ourTeamMenu = document.getElementById('ourTeamMenu');
-    const arrow = ourTeamToggle?.querySelector('.arrow');
-
-    if (ourTeamToggle && ourTeamMenu) {
-        const expandPanel = () => {
-            ourTeamMenu.style.maxHeight = `${ourTeamMenu.scrollHeight}px`;
-            ourTeamMenu.classList.add('active');
-            arrow?.classList.add('active');
-        };
-
-        const collapsePanel = () => {
-            ourTeamMenu.style.maxHeight = null;
-            ourTeamMenu.classList.remove('active');
-            arrow?.classList.remove('active');
-        };
-
-        // Desktop: Show/hide dropdown on hover
-        ['mouseover', 'focus'].forEach(eventType => {
-            ourTeamToggle.addEventListener(eventType, expandPanel);
-        });
-
-        ['mouseout', 'blur'].forEach(eventType => {
-            ourTeamToggle.addEventListener(eventType, collapsePanel);
-        });
-
-        // Mobile: Toggle dropdown on click
-        ourTeamToggle.addEventListener('click', e => {
-            e.preventDefault();
-            const isActive = ourTeamMenu.classList.contains('active');
-            isActive ? collapsePanel() : expandPanel();
-        });
-
-        // Close "Our Team" dropdown if clicking outside
-        document.addEventListener('click', e => {
-            if (!ourTeamToggle.contains(e.target) && !ourTeamMenu.contains(e.target)) {
-                collapsePanel();
+        // Close menu when clicking a link
+        navMenu.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('is-active');
             }
         });
     } else {
-        console.warn('Our Team dropdown menu or toggle button not found in DOM.');
+        console.error('Hamburger menu or navigation menu not found.');
     }
 
-    // General dropdown functionality for other dropdowns
-    
-    const toggleDropdown = (toggleButton, dropdownMenu, arrow) => {
+    // Dropdown Menu Functionality
+    const toggleDropdown = (toggleButton, dropdownMenu, arrow = null) => {
         const isActive = dropdownMenu.classList.contains('active');
-        if (isActive) {
-            dropdownMenu.style.maxHeight = null;
-            dropdownMenu.classList.remove('active');
-            arrow?.classList.remove('active');
-        } else {
-            dropdownMenu.style.maxHeight = `${dropdownMenu.scrollHeight}px`;
-            dropdownMenu.classList.add('active');
-            arrow?.classList.add('active');
-        }
+        dropdownMenu.style.maxHeight = isActive ? null : `${dropdownMenu.scrollHeight}px`;
+        dropdownMenu.classList.toggle('active', !isActive);
+        arrow?.classList.toggle('active', !isActive);
+        toggleButton.setAttribute('aria-expanded', !isActive);
     };
 
+    // Dropdown Toggle Listeners
     document.querySelectorAll('.dropdown-toggle').forEach(toggleButton => {
-    
-        const dropdownMenu = toggleButton.nextElementSibling;
-
-        toggleButton.addEventListener('click', e => {
-            e.preventDefault();
-            const isActive = dropdownMenu.classList.contains('active');
-
-            if (isActive) {
-                dropdownMenu.style.maxHeight = null;
-                dropdownMenu.classList.remove('active');
-            } else {
-                // Close other open dropdowns
-                document.querySelectorAll('.dropdown-content.active').forEach(menu => {
-                    menu.style.maxHeight = null;
-                    menu.classList.remove('active');
-                });
-
-                dropdownMenu.style.maxHeight = `${dropdownMenu.scrollHeight}px`;
-                dropdownMenu.classList.add('active');
-            }
-
-            // Update ARIA attributes for accessibility
-            toggleButton.setAttribute('aria-expanded', dropdownMenu.classList.contains('active'));
-        });
-    });
-
-    // Close all dropdowns when clicking outside
-    document.addEventListener('click', e => {
-        document.querySelectorAll('.dropdown-content.active').forEach(menu => {
-            if (!menu.parentElement.contains(e.target)) {
-                menu.style.maxHeight = null;
-                menu.classList.remove('active');
-            }
-        });
-    });
-
-    // Mobile dropdown functionality
-    document.querySelectorAll('#nav-menu .dropdown-toggle').forEach(toggleButton => {
         const dropdownMenu = toggleButton.nextElementSibling;
         const arrow = toggleButton.querySelector('.arrow');
 
-        toggleButton.addEventListener('click', e => {
+        toggleButton.addEventListener('click', (e) => {
             e.preventDefault();
-
             const isActive = dropdownMenu.classList.contains('active');
-            if (isActive) {
-                dropdownMenu.style.maxHeight = null;
-                dropdownMenu.classList.remove('active');
-                arrow?.classList.remove('active');
-            } else {
-                navMenu.querySelectorAll('.dropdown-content.active').forEach(menu => {
+
+            // Close all other dropdowns
+            document.querySelectorAll('.dropdown-content.active').forEach(menu => {
+                if (menu !== dropdownMenu) {
                     menu.style.maxHeight = null;
                     menu.classList.remove('active');
-                    menu.previousElementSibling.querySelector('.arrow')?.classList.remove('active');
-                });
+                }
+            });
 
-                dropdownMenu.style.maxHeight = `${dropdownMenu.scrollHeight}px`;
-                dropdownMenu.classList.add('active');
-                arrow?.classList.add('active');
-            }
-
-            // Update ARIA attributes
-            toggleButton.setAttribute('aria-expanded', dropdownMenu.classList.contains('active'));
+            // Toggle the current dropdown
+            toggleDropdown(toggleButton, dropdownMenu, arrow);
         });
     });
-});
 
+    // Close All Dropdowns When Clicking Outside
+    document.addEventListener('click', (e) => {
+        document.querySelectorAll('.dropdown-content.active').forEach(menu => {
+            if (!menu.parentElement.contains(e.target)) {
+                const toggleButton = menu.previousElementSibling;
+                const arrow = toggleButton.querySelector('.arrow');
+                toggleDropdown(toggleButton, menu, arrow);
+            }
+        });
+    });
+
+    // Scroll Progress Bar
+    const progressBar = document.createElement('div');
+    progressBar.id = 'progress-bar';
+    document.body.appendChild(progressBar);
+
+    const updateProgressBar = () => {
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollPosition = window.scrollY;
+        const scrollPercent = (scrollPosition / scrollHeight) * 100;
+        progressBar.style.width = `${scrollPercent}%`;
+    };
+
+    window.addEventListener('scroll', throttle(updateProgressBar, 50));
+});
